@@ -7,7 +7,7 @@ __pycache__/
 *.so
 
 /log/*
-/report/*
+/reports/*
 
 # Distribution / packaging
 .Python
