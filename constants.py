@@ -1,8 +1,9 @@
 import re
 
-DATE_PATTERN = r'(\d{4}\d{2}\d{2})'
+DATE_PATTERN = r"(\d{4}\d{2}\d{2})"
 
-LOG_PATTERN = re.compile(r'''
+LOG_PATTERN = re.compile(
+    r"""
     (?P<remote_addr>\S+)
     \s+(?P<remote_user>\S+)
     \s+(?P<http_x_real_ip>\S+)
@@ -16,7 +17,9 @@ LOG_PATTERN = re.compile(r'''
     \s+"(?P<http_x_request_id>.*?)"
     \s+"(?P<http_x_rb_user>.*?)"
     \s+(?P<request_time>\d+\.\d+)
-''', re.VERBOSE)
+""",
+    re.VERBOSE,
+)
 
 CONFIG = {
     "REPORT_SIZE": 5,
@@ -25,4 +28,4 @@ CONFIG = {
     "LOG_FILE_PATH": "./",
 }
 
-BASE_TEMPLATE_PATH = './templates/report.html'
+BASE_TEMPLATE_PATH = "./templates/report.html"
