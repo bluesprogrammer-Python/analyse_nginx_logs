@@ -1,11 +1,11 @@
-name: CI
+name: Run pre-commit
 
 on:
   push:
     branches: [ main ]
 
 jobs:
-  build:
+  pre-commit:
     runs-on: ubuntu-latest
     container:
       image: registry.gitlab.com/winny/pre-commit-docker:latest
@@ -22,4 +22,4 @@ jobs:
             .pre-commit-cache
           key: ${{ runner.os }}-pre-commit-cache-${{ hashFiles('.pre-commit-config.yaml') }}
       - name: Run pre-commit
-        run: pre-commit run -a
+        run: pre-commit run --all-files
