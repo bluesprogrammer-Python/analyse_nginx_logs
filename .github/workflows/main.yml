@@ -15,8 +15,9 @@ jobs:
       - uses: actions/checkout@v3
       - name: Allow workspace
         run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
-      - name: Install pre-commit
-        run: pip install --upgrade pre-commit
+      - name: Remove pre-commit cache
+        run: |
+          rm -rf .pre-commit-cache
       - name: Cache .pre-commit-cache
         uses: actions/cache@v3
         with:
