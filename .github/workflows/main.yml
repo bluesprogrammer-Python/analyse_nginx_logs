@@ -12,14 +12,9 @@ jobs:
       env:
         PRE_COMMIT_HOME: .pre-commit-cache
     steps:
-      - uses: actions/checkout@v3
-      - name: Allow workspace
-        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
-      - name: set PY
-        run: echo "PY=$(python -VV | sha256sum | cut -d' ' -f1)" >> $GITHUB_ENV
-      - uses: actions/cache@v3
-        with:
-          path: ~/.cache/pre-commit
-          key: pre-commit|${{ env.PY }}|${{ hashFiles('.pre-commit-config.yaml') }}
-      - name: Run pre-commit
-        run: pre-commit run --all-files
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+      - run: pip install pre-commit
+      - run: pre-commit --version
+      - run: pre-commit install
+      - run: pre-commit run --all-files
