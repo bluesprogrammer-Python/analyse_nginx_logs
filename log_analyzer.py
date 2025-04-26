@@ -62,11 +62,11 @@ class LogAnalyzer:
     )
 
     def __init__(self) -> None:
-        CONFIG: dict[str, Any]
-        self.REPORT_SIZE: Optional[int | None] = CONFIG.get("REPORT_SIZE")
-        self.REPORT_DIR: Optional[str | None] = CONFIG.get("REPORT_DIR")
-        self.LOG_DIR: Optional[str | None] = CONFIG.get("LOG_DIR")
-        self.LOG_FILE_PATH: Optional[str | None] = CONFIG.get("LOG_FILE_PATH")
+        config: dict[str, Any] = CONFIG
+        self.REPORT_SIZE: Optional[int | None] = config.get("REPORT_SIZE")
+        self.REPORT_DIR: Optional[str | None] = config.get("REPORT_DIR")
+        self.LOG_DIR: Optional[str | None] = config.get("LOG_DIR")
+        self.LOG_FILE_PATH: Optional[str | None] = config.get("LOG_FILE_PATH")
 
     def get_config_data(self) -> None:
         """A method for parsing config"""
