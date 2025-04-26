@@ -71,21 +71,31 @@ class LogAnalyzer:
     def get_config_data(self) -> None:
         """A method for parsing config"""
         if args.config:
-            with open(args.config, "r", encoding="utf-8") as f:
-                config_file_data = f.read()
-                js = json.loads(config_file_data)
-                self.REPORT_SIZE = (
-                    js.get("REPORT_SIZE") if js.get("REPORT_SIZE") else self.REPORT_SIZE
-                )
-                self.REPORT_DIR = (
-                    js.get("REPORT_DIR") if js.get("REPORT_DIR") else self.REPORT_DIR
-                )
-                self.LOG_DIR = js.get("LOG_DIR") if js.get("LOG_DIR") else self.LOG_DIR
-                self.LOG_FILE_PATH = (
-                    js.get("LOG_FILE_PATH")
-                    if js.get("LOG_FILE_PATH")
-                    else self.LOG_FILE_PATH
-                )
+            try:
+                with open(args.config, "r", encoding="utf-8") as f:
+                    config_file_data = f.read()
+                    js = json.loads(config_file_data)
+                    self.REPORT_SIZE = (
+                        js.get("REPORT_SIZE")
+                        if js.get("REPORT_SIZE")
+                        else self.REPORT_SIZE
+                    )
+                    self.REPORT_DIR = (
+                        js.get("REPORT_DIR")
+                        if js.get("REPORT_DIR")
+                        else self.REPORT_DIR
+                    )
+                    self.LOG_DIR = (
+                        js.get("LOG_DIR") if js.get("LOG_DIR") else self.LOG_DIR
+                    )
+                    self.LOG_FILE_PATH = (
+                        js.get("LOG_FILE_PATH")
+                        if js.get("LOG_FILE_PATH")
+                        else self.LOG_FILE_PATH
+                    )
+            except Exception as e:
+                log.error(f"Error while parsing a file with a custom config - {e}")
+                sys.exit()
 
     def get_logging_config(self) -> None:
         """A method for configure logs and choose output: stdout or file"""

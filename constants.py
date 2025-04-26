@@ -25,7 +25,7 @@ CONFIG = {
     "REPORT_SIZE": 5,
     "REPORT_DIR": "./reports/",
     "LOG_DIR": "./log/",
-    "LOG_FILE_PATH": "./",
+    "LOG_FILE_PATH": "./log/",
 }
 
 BASE_TEMPLATE_PATH = "./templates/report.html"

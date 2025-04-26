@@ -1,1 +1,10 @@
 .venv
+.ruff_cache
+.github
+.mypy_cache
+.gitignore
+.pre-commit-config.yaml
+docker-compose.yml
+Dockerfile
+Makefile
+README.md

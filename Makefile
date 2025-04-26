@@ -25,10 +25,18 @@ up: ## Запуск контейнера
 down: ## Остановка контейнера
 	@sudo docker compose down
 
-.PHONY: analyse
-analyse: ## Запуск скрипта
-	@sudo docker compose exec app uv run log_analyzer.py
+.PHONY: bash
+bash: ## Перейти в контейнер
+	@sudo docker compose exec app /bin/bash
 
 .PHONY: pre-commit
 pre-commit: ## Запуск pre-commit для всех файлов
 	@pre-commit run --all-files
+
+.PHONY: ps
+ps: ## Просмотр информации о контейнере
+	@sudo docker compose ps
+
+.PHONY: analyse
+analyse: ## Запуск скрипта
+	@sudo docker compose exec app uv run log_analyzer.py $(ARGS)
