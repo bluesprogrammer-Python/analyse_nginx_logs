@@ -6,6 +6,8 @@ services:
       context: ./
       dockerfile: Dockerfile
     volumes:
+      - ./log_analyzer.py:/app/log_analyzer.py
+      - ./constants.py:/app/constants.py
       - ./reports:/app/reports/
       - ./log:/app/log/
       - ./custom_config.py:/app/custom_config.py

@@ -1,6 +1,7 @@
 import re
 
 DATE_PATTERN = r"(\d{4}\d{2}\d{2})"
+REPORT_DATE_PATTERN = r"(\d{4}.\d{2}.\d{2})"
 
 LOG_PATTERN = re.compile(
     r"""

@@ -7,6 +7,7 @@ import os
 import re
 import statistics
 import sys
+from argparse import Namespace
 from dataclasses import dataclass
 from datetime import datetime
 from operator import itemgetter
@@ -15,7 +16,13 @@ from typing import Any, Generator, Optional, TypedDict, cast
 
 import structlog
 
-from constants import BASE_TEMPLATE_PATH, CONFIG, DATE_PATTERN, LOG_PATTERN
+from constants import (
+    BASE_TEMPLATE_PATH,
+    CONFIG,
+    DATE_PATTERN,
+    LOG_PATTERN,
+    REPORT_DATE_PATTERN,
+)
 
 RESULT = []
 LOG_FILE_PATH = None
@@ -36,11 +43,6 @@ structlog.configure(
     cache_logger_on_first_use=True,
 )
 log = structlog.get_logger()
-
-
-parser = argparse.ArgumentParser()
-parser.add_argument("--config", help="set absolute path to config file")
-args = parser.parse_args()
 
 
 @dataclass
@@ -68,7 +70,7 @@ class LogAnalyzer:
         self.LOG_DIR: Optional[str | None] = config.get("LOG_DIR")
         self.LOG_FILE_PATH: Optional[str | None] = config.get("LOG_FILE_PATH")
 
-    def get_config_data(self) -> None:
+    def get_config_data(self, args: Namespace) -> None:
         """A method for parsing config"""
         if args.config:
             try:
@@ -107,7 +109,11 @@ class LogAnalyzer:
                 "file": {
                     "level": "DEBUG",
                     "class": "logging.handlers.WatchedFileHandler",
-                    "filename": "logs.log",
+                    "filename": (
+                        f"{self.LOG_FILE_PATH}logs.log"
+                        if self.LOG_FILE_PATH
+                        else "logs.log"
+                    ),
                 },
                 "default": {
                     "level": "DEBUG",
@@ -153,6 +159,22 @@ class LogAnalyzer:
         if not self.log_file_data.file_date:
             log.warning("There is no log file for processing")
             sys.exit()
+
+    def check_exist_report(self) -> None:
+        """The method for check exist report"""
+        for filename in os.listdir(self.REPORT_DIR):
+            match = re.search(REPORT_DATE_PATTERN, filename)
+            if match:
+                file_date_str = match.group(1)
+                file_date = datetime.strptime(file_date_str, "%Y.%m.%d")
+                formatted_date = file_date.strftime("%Y.%m.%d")
+                if formatted_date == self.log_file_data.file_date:
+                    log.info("The report for this log file already exist")
+                    sys.exit()
+            else:
+                log.info(
+                    f"There are no exist reports for this date - {self.log_file_data.file_date}"
+                )
 
     def parse_file(self) -> Generator:
         """Generator function for parsing logs from a file"""
@@ -220,8 +242,11 @@ class LogAnalyzer:
 
 
 def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--config", help="set absolute path to config file")
+    args: Namespace = parser.parse_args()
     analyse_logs = LogAnalyzer()
-    analyse_logs.get_config_data()
+    analyse_logs.get_config_data(args)
     analyse_logs.get_logging_config()
     log.info("Starting Script...")
     log.info(
@@ -229,6 +254,7 @@ def main():
         f"REPORT_DIR - {analyse_logs.REPORT_DIR}, LOG_DIR - {analyse_logs.LOG_DIR}, LOG_FILE_PATH - {analyse_logs.LOG_FILE_PATH}"
     )
     analyse_logs.find_latest_file()
+    analyse_logs.check_exist_report()
     analyse_logs.analyse()
     analyse_logs.create_report()
 

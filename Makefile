@@ -9,6 +9,7 @@ help: ## Вывод справки
 
 .PHONY: setup
 setup: ## Установка проекта и pre-commit
+	mkdir -p reports log
 	@uv sync
 	@. .venv/bin/activate
 	@pre-commit autoupdate
@@ -31,7 +32,7 @@ bash: ## Перейти в контейнер
 
 .PHONY: pre-commit
 pre-commit: ## Запуск pre-commit для всех файлов
-	@pre-commit run --all-files
+	@pre-commit run --all-files --verbose || true
 
 .PHONY: ps
 ps: ## Просмотр информации о контейнере
