@@ -1,8 +1,5 @@
 .ONESHELL:
 
-APP_DIR = app
-APP_VERSION = 1.0
-
 .PHONY: help
 help: ## Вывод справки
 	@egrep '^[\.a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'
